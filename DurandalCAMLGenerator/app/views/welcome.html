@@ -1,0 +1,70 @@
+﻿<section>
+
+    <h2 data-bind="html:displayName"></h2>
+    <blockquote data-bind="html:description"></blockquote>
+    
+    <div class="alert alert-success">
+      <h4>Read Me Please</h4>
+        For this page to work, you will need to add this page to your browser's intranet zone, or navigate to the disconnected example.
+        You can also download the source code <a href="#">here</a> (coming soon).
+    </div>
+
+    <h3>Parameters</h3>
+
+    Site URL: <input id="siteURL" type="text" data-bind="value: spInfo.siteURL" />    
+
+    <br />
+    <div class="spaced">
+        Lists<br />
+        <select id="lists" data-bind="foreach: spInfo.availableLists, value: spInfo.selectedList">
+            <option data-bind="text: Title"></option>
+        </select>
+
+    </div>
+
+    <div class="spaced">
+        View Fields<br />
+        <select id="listFields" multiple="multiple" data-bind="options: spInfo.availableFields, optionsText: 'DisplayName', selectedOptions: spInfo.viewFields">
+        </select>
+    </div>
+
+    <div class="spaced">
+        Boolean Operator<br />
+        <select id="booleanOperator" data-bind="options: spInfo.booleanOperations, optionsText: 'Operator', value: spInfo.booleanOperator">
+        </select>
+    </div>
+
+    <div class="spaced">
+        Filter<br />
+        <table id="filterFields" data-bind="foreach: { data: spInfo.filterFields, as: 'field' }">
+            <tr>
+                <td>
+                    <select data-bind="options: $parent.spInfo.availableFields, optionsText: 'DisplayName', value: SelectedField">
+                    </select>
+
+                    <select data-bind="options: $parent.spInfo.comparisonOperations, optionsText: 'Operator', value: ComparisonOperation"></select>
+
+                    <input type="text" data-bind="value: Filter" />
+
+                </td>
+            </tr>
+        </table>
+        <button onclick="javascript: AddFilter();">New</button>
+    </div>
+
+
+    <h3>Code Sample: SharePoint Client Object Model</h3>
+    <div style="visibility:visible;" data-bind="compose: { model: 'viewmodels/CAML/SharePointClientOM', cacheViews: false } "></div> <!-- Include the SharePoint client object model -->
+
+    <h3>Code Sample: SharePoint Server Object Model</h3>
+    <div style="visibility:visible;" data-bind="compose: { model: 'viewmodels/CAML/SharePointServerOM', cacheViews: false } "></div> <!-- Include the SharePoint server object model -->
+
+    <h3>Code Sample: Javascript Client Object Model</h3>
+    <div style="visibility:visible;" data-bind="compose: { model: 'viewmodels/CAML/JavascriptClientOM', cacheViews: false } "></div> <!-- Include the javascript client object model -->
+
+    <h3>Code Sample: jQuery</h3>
+    <div style="visibility:visible;" data-bind="compose: { model: 'viewmodels/CAML/jQuery', cacheViews: false } "></div> <!-- Include the jQuery code template -->
+
+
+
+</section>

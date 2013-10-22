@@ -1,0 +1,45 @@
+﻿<div>
+<!-- Template output goes into a pre tag -->
+<pre id="spserveromex" style=""></pre>
+<div id="spserveromexsrc" style="display:none;" >
+using System;
+using System.Linq;
+using Microsoft.SharePoint;
+
+namespace CAMLTest
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            using (SPSite site = new SPSite("<!-- ko text:spInfo.siteURL --><!-- /ko -->"))
+            {
+                using (SPWeb web = site.OpenWeb())
+                {
+                    SPList list = web.Lists["<!-- ko text: spInfo.selectedList --><!-- /ko -->"];
+                    SPQuery camlQuery = new SPQuery();
+                    camlQuery.Query = @"
+                                    &lt;Where&gt; <!-- ko if: spInfo.filterFields().length > 1 -->
+                                        &lt;<!-- ko text: spInfo.booleanOperator.Operator --><!-- /ko -->&gt; <!-- /ko --><!-- ko foreach: spInfo.filterFields -->
+                                            &lt;<!-- ko text: ComparisonOperation.Operator --><!-- /ko -->&gt;&lt;FieldRef Name='<!-- ko text:SelectedField.Name --><!-- /ko -->' /&gt;&lt;Value Type='Text'&gt;<!-- ko text: Filter --><!-- /ko -->&lt;/Value&gt;&lt;/<!-- ko text: ComparisonOperation.Operator --><!-- /ko -->&gt; <!-- /ko --><!-- ko if: spInfo.filterFields().length > 1 -->
+                                        &lt;/<!-- ko text: spInfo.booleanOperator.Operator --><!-- /ko -->&gt; <!-- /ko -->
+                                    &lt;/Where&gt; 
+                                    &lt;OrderBy&gt;<!-- ko foreach: spInfo.viewFields -->&lt;FieldRef Name='<!-- ko text:Name --><!-- /ko -->' Ascending='True' /&gt;<!-- /ko -->&lt;/Order By&gt;";
+
+                    camlQuery.ViewFields = "<!-- ko foreach: spInfo.viewFields -->&lt;FieldRef Name='<!-- ko text:Name --><!-- /ko -->' /&gt;<!-- /ko -->";
+                    camlQuery.ViewFieldsOnly = true;
+                    camlQuery.ViewAttributes += " Scope='RecursiveAll'";
+                    SPListItemCollection listItems = list.GetItems(camlQuery);
+
+                    for (int i = 0; i < listItems.Count; i++)
+                    {
+                        SPListItem listItem = listItems[i];
+                        Console.WriteLine(string.Format("ID: {0}<!-- ko foreach: spInfo.viewFields -->, <!-- ko text:DisplayName --><!-- /ko -->: {<!-- ko text:$index()+1 --><!-- /ko -->}<!-- /ko -->", listItem.ID<!-- ko foreach: spInfo.viewFields -->, listItem["<!-- ko text:Name --><!-- /ko -->"]<!-- /ko -->));
+                    }
+                }
+            }
+        }        
+    }
+}
+</div>
+</div>
