@@ -16,7 +16,7 @@
     var ctor = function () {
         that = this;
         this.displayName = 'Welcome to the SharePoint CAML Generator!';
-        this.description = 'The SharePoint CAML Generator generates CAML examles in jquery, javascript, client object model and server object model.';
+        this.description = 'The CAML Generator is a Durandal SPA web application.  <br/>It generates code that you can use to query SharePoint via: jQuery, Javascript Client Object Model, SharePoint Server Object Model, and SharePoint Client Object Model.';
         this.features = [
             'Clean MV* Architecture',
             'JS & HTML Modularity',

@@ -21,14 +21,14 @@
         </select>
     </div>
 
-    <div class="spaced">
+    <div class="spaced" data-bind="if: spInfoTest.filterFields().length > 0 ">
         Boolean Operator<br />
         <select id="booleanOperator" data-bind="options: spInfoTest.booleanOperations, optionsText: 'Operator', value: spInfoTest.booleanOperator">
         </select>
     </div>
 
     <div class="spaced">
-        Filter<br />
+        <div data-bind="if: spInfoTest.filterFields().length > 0 ">Filter<br /></div>
         <table id="filterFields" data-bind="foreach: { data: spInfoTest.filterFields, as: 'field' }">
             <tr>
                 <td>
@@ -42,7 +42,7 @@
                 </td>
             </tr>
         </table>
-        <button onclick="javascript: AddFilter();">New</button>
+        <button onclick="javascript: AddFilter();">New Filter</button>
     </div>
 
 
