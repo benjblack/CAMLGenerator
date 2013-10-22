@@ -20,7 +20,7 @@
 define('spInfo', function () {
     var changed = 0;
     var useExampleCode = false;
-    var siteURL = "http://migration.ksnet.dev";
+    var siteURL = "http://SomeSharePointSite";
     var selectedList;
     var viewFields;
     var filterFields;
