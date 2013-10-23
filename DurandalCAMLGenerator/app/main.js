@@ -90,7 +90,7 @@ define('spInfo', function () {
 
 define('spInfoTest', function () {
     var changed = 0;
-    var siteURL = "http://my.sharepointsite.com";
+    var siteURL = "http://SomeSharePointSite";
     var selectedList;
     var viewFields;
     var filterFields;

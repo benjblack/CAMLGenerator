@@ -50,6 +50,9 @@
         spInfo.useExampleCode = false;
         spInfo.listWebServiceUrl = spInfo.siteURL + "/_vti_bin/lists.asmx"
         getListData();
+        window.setTimeout(function () {
+            getFieldData();
+        }, 500)
 
         // Run the highlighter: http://www.atlantacodefactory.com/blog/?p=34
         /*
@@ -104,12 +107,14 @@
             dataType: "xml",
             data: soapEnv,
             complete: function (xData) {
-                lists = ko.observableArray();
+                if (!spInfo.availableLists) spInfo.availableLists = ko.observableArray();
+                spInfo.availableLists().length = 0;
+                //lists = ko.observableArray();
                 var result = '';
                 $(xData.responseText).find("\\List").each(function () {
-                    lists.push(new spInfo.SPListInfo($(this).attr("Title")));
+                    spInfo.availableLists.push(new spInfo.SPListInfo($(this).attr("Title")));
                 });
-                spInfo.availableLists = lists;
+                //spInfo.availableLists = lists;
             },
             contentType: "text/xml; charset=\"utf-8\""
         });
@@ -140,13 +145,15 @@
             dataType: "xml",
             data: soapEnv,
             complete: function (xData) {
-                listFields = ko.observableArray();
+                if (!spInfo.availableFields) spInfo.availableFields = ko.observableArray();
+                spInfo.availableFields().length = 0;
+                //listFields = ko.observableArray();
                 var result = '';
                 $(xData.responseText).find("Field").each(function () {
                     if ($(this).attr("Name") != "hidden" && $(this).attr("DisplayName"))
-                        listFields.push(new spInfo.SPFieldInfo($(this).attr("Name"), $(this).attr("DisplayName")));
+                        spInfo.availableFields.push(new spInfo.SPFieldInfo($(this).attr("Name"), $(this).attr("DisplayName")));
                 });
-                spInfo.availableFields = listFields;
+                //spInfo.availableFields = listFields;
             },
             contentType: "text/xml; charset=\"utf-8\""
         });
