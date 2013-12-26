@@ -1,0 +1,45 @@
+﻿<div>
+<!-- Template output goes into a pre tag -->
+<pre id="jqueryex" style=""></pre>
+<div id="jqueryexsrc" style="display:none;">
+    &lt;script src="http://code.jquery.com/jquery-1.10.1.min.js"&gt;&lt;/script&gt; 
+    &lt;script type="text/javascript"&gt;  
+    $( document ).ready(function() { 
+        var soapEnv = 
+        "&lt;soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/'&gt; \
+            &lt;soapenv:Body&gt; \
+                &lt;GetListItems xmlns='http://schemas.microsoft.com/sharepoint/soap/'&gt; \
+                    &lt;ListName&gt;<!-- ko text: spInfo.selectedList --><!-- /ko -->&lt;/ListName&gt; \
+                    &lt;OrderBy&gt; \<!-- ko foreach: spInfo.viewFields -->
+                        &lt;FieldRef Name='<!-- ko text:Name --><!-- /ko -->' Ascending='TRUE' /&gt; \<!-- /ko -->
+                    &lt;/OrderBy&gt; \
+                    &lt;ViewFields&gt; \<!-- ko foreach: spInfo.viewFields -->
+                        &lt;FieldRef Name='<!-- ko text:Name --><!-- /ko -->' /&gt; \<!-- /ko -->
+                    &lt;/ViewFields&gt; \
+                    &lt;RowLimit&gt;10&lt;/RowLimit&gt; \
+                &lt;/GetListItems&gt; \
+            &lt;/soapenv:Body&gt; \
+        &lt;/soapenv:Envelope&gt;";  
+        
+        jQuery.support.cors = true; // force cross-site scripting 
+        $.ajax({    
+            url: '<!-- ko text:spInfo.listWebServiceUrl --><!-- /ko -->',    
+            type: 'POST',    
+            dataType: 'xml',    
+            data: soapEnv,    
+            contentType: 'text/xml; charset=\"utf-8\"', 
+            complete: function (xData) {    
+                var result = '';    
+                $(xData.responseText).find('row').each(function () {    
+                    var row = $(this);    
+                    <!-- ko foreach: spInfo.viewFields -->               
+                    $('#exampleout').append('<li><!-- ko text:Name --><!-- /ko -->: ' + row.attr('ows_<!-- ko text:Name --><!-- /ko -->') + '</li>')<!-- /ko -->
+                });    
+            },  
+        contentType: 'text/xml; charset="utf-8"'  
+        }); 
+    });
+    &lt;/script&gt; 
+    <ul id="exampleout"></ul> 
+</div>
+</div> 

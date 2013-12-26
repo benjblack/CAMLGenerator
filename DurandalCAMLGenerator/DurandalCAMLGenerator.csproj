@@ -48,7 +48,7 @@
     <Content Include="app\viewmodels\CAMLExamples\jQuery.js" />
     <Content Include="app\viewmodels\CAMLExamples\SharePointClientOM.js" />
     <Content Include="app\viewmodels\CAMLExamples\SharePointServerOM.js" />
-    <Content Include="app\viewmodels\examples.js" />
+    <Content Include="app\viewmodels\disconnected.js" />
     <Content Include="app\viewmodels\flickr.js" />
     <Content Include="app\viewmodels\shell.js" />
     <Content Include="app\viewmodels\welcome.js" />
@@ -60,12 +60,13 @@
     <Content Include="app\views\CAMLExamples\jQuery.html" />
     <Content Include="app\views\CAMLExamples\SharePointClientOM.html" />
     <Content Include="app\views\CAMLExamples\SharePointServerOM.html" />
-    <Content Include="app\views\examples.html" />
+    <Content Include="app\views\disconnected.html" />
     <Content Include="app\views\detail.html" />
     <Content Include="app\views\flickr.html" />
     <Content Include="app\views\shell.html" />
     <Content Include="app\views\welcome.html" />
     <Content Include="ClientObjectModelExample.txt" />
+    <Content Include="index2.html" />
     <Content Include="css\ie10mobile.css" />
     <Content Include="css\starterkit.css" />
     <Content Include="lib\bootstrap\css\bootstrap-responsive.css" />

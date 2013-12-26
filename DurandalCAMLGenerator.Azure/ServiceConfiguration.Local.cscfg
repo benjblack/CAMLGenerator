@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="DurandalCAMLGenerator.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-03.2.0">
+  <Role name="DurandalCAMLGenerator">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="admin" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEFEUtlxc3nS7TwqL1spdQ2swDQYJKoZIhvcNAQEBBQAEggEAMOgbH6/pLUdVlh+zOJuzarZKuUDLdjDuHokqoPBXFmnJd2mbcnVPOV3hVm4s3FHfMzy+b1HLp+yVuP72br9V5D2sZSXwx50KzIB+/ddsfoDLrgQ+Qr/AuWytaTwO577EVA7T1IirT+YoDrgWlzz6L00b3yi8HMk4IYayextavPfxcjxG3Mu6vHwkH2oDG5zhLGOBJAWftOp5n1QRs5BeCfg0VmGBn9WWp+CjRLYimzaC49/2C6nJksEhSnbs34ecy51qhCdkmmXTt46BpbAmoW3ibFMYjuZj4TRI15qvX1c1DVct1DvZKJRX+05r0BgvToicz+/9rpAkWlPyw8cwZjAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECLgHORBe8lqlgBDtXTNPnZEyRHbT1frpUjLq" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2014-09-26T23:59:59.0000000-04:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="7BDECEE3E2C532549BD8FB3112B3DB5D80B99D4D" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

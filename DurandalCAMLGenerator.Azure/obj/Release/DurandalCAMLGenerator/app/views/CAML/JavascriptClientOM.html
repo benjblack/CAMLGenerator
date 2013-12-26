@@ -1,0 +1,53 @@
+﻿<div>
+<!-- Template output goes into a pre tag -->
+<pre id="jsclientomex" style=""></pre>
+<div id="jsclientomexsrc" style="display:none;" >
+    &lt;SharePoint:ScriptLink Name="SP.js" runat="server" OnDemand="true" Localizable="false" /&gt;
+    &lt;script type="text/javascript"&gt; 
+        // Ensure the SharePoint script 'SP.js' is loaded. 
+        ExecuteOrDelayUntilScriptLoaded(SetWebUserData, "SP.js"); 
+    
+        function SetWebUserData() { 
+            var clientContext = new SP.ClientContext("/");  // relative URL 
+            var list = clientContext.get_web().get_lists().getByTitle('<!-- ko text: spInfo.selectedList --><!-- /ko -->'); 
+            var query = new SP.CamlQuery(); 
+            query.set_viewXml( 
+            "&lt;View&gt; \
+                &lt;Query&gt; \
+                    &lt;Where&gt; \<!-- ko if: spInfo.filterFields().length > 1 -->
+                        &lt;<!-- ko text: spInfo.booleanOperator.Operator --><!-- /ko -->&gt; \<!-- /ko --><!-- ko foreach: spInfo.filterFields -->
+                            &lt;<!-- ko text: ComparisonOperation.Operator --><!-- /ko -->&gt;&lt;FieldRef Name='<!-- ko text:SelectedField.Name --><!-- /ko -->' /&gt;&lt;Value Type='Text'&gt;<!-- ko text: Filter --><!-- /ko -->&lt;/Value&gt;&lt;/<!-- ko text: ComparisonOperation.Operator --><!-- /ko -->&gt; \<!-- /ko --><!-- ko if: spInfo.filterFields().length > 1 -->
+                        &lt;/<!-- ko text: spInfo.booleanOperator.Operator --><!-- /ko -->&gt; \<!-- /ko -->
+                    &lt;/Where&gt; \
+                &lt;/Query&gt; \
+                &lt;OrderBy&gt; \<!-- ko foreach: spInfo.viewFields -->
+                    &lt;FieldRef Name='<!-- ko text:Name --><!-- /ko -->' Ascending='TRUE' /&gt; \<!-- /ko -->
+                &lt;/OrderBy&gt; \
+                &lt;ViewFields&gt; \<!-- ko foreach: spInfo.viewFields -->
+                    &lt;FieldRef Name='<!-- ko text:Name --><!-- /ko -->' /&gt; \<!-- /ko -->
+                &lt;/ViewFields&gt; \
+                &lt;RowLimit&gt;10&lt;/RowLimit&gt; \
+            &lt;/View&gt;"); 
+            clientContext.load(list); 
+            this.collListItems = list.getItems(query); 
+            clientContext.load(collListItems); 
+            clientContext.executeQueryAsync(Function.createDelegate(this, this.onQuerySucceeded), Function.createDelegate(this, this.onQueryFailed)); 
+        }; 
+    
+        function onQuerySucceeded() { 
+            var listItemEnumerator = this.collListItems.getEnumerator(); 
+            var strHtml = ''; 
+            while (listItemEnumerator.moveNext()) { 
+                var listItem = listItemEnumerator.get_current(); 
+                <!-- ko foreach: spInfo.viewFields -->
+                $('#exampleout').append('<li><!-- ko text:Name --><!-- /ko -->: ' + listItem.get_item("<!-- ko text:Name --><!-- /ko -->") + '</li>');<!-- /ko -->
+            }
+        } 
+    
+        function onQueryFailed() { 
+            alert('failed'); 
+        } 
+    &lt;/script&gt; 
+    <ul id="exampleout"></ul>  
+</div>
+</div>

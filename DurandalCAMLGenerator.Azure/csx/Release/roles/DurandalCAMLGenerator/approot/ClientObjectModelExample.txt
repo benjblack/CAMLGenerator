@@ -1,0 +1,182 @@
+﻿using System;
+using System.Web.UI;
+//using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using Microsoft.SharePoint;
+using Microsoft.SharePoint.Client;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+
+
+namespace KT.SharePoint.Intranet.FIPMyTasks
+{
+    public partial class FIPMyTasksUserControl : UserControl
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            string forceuserid = "";
+            string user = "";
+
+            forceuserid = Request["forceuserid"];
+
+            if (!String.IsNullOrEmpty(forceuserid))
+            {
+                user = forceuserid;
+            }
+            else
+            {
+                user = System.Web.HttpContext.Current.Request.ServerVariables["LOGON_USER"];
+            }
+
+            string username = GetName(user);
+            //Raczkowski, David
+            //ClientContext clientContext = new ClientContext("http://www.ourktnet.com/Knowledge/ClientPortal");
+            //Web site = clientContext.Web;
+            //List list = clientContext.Web.Lists.GetByTitle("IPTaskList");
+
+            SPWeb site = Microsoft.SharePoint.SPContext.Current.Web;
+            SPList list = site.Lists.TryGetList("IPTaskList");
+            
+            
+            //CamlQuery camlQuery = new CamlQuery();
+
+            //CamlQuery camlQuery = CamlQuery.CreateAllItemsQuery();
+            //camlQuery.ViewXml = @"<View />";
+            string camlQuery = @"<View>
+                <Query>
+                  <Where>
+                    <Eq>
+                      <FieldRef Name='AssignedTo'/>
+                      <Value Type='Text'>" + username + @"</Value>
+                    </Eq>
+                  </Where>
+                  <OrderBy><FieldRef Name='DueDate' Ascending='True'/></Order By>
+                </Query>
+                <RowLimit>100</RowLimit>
+              </View>";
+
+            if(forceuserid=="sp_admin")
+            {
+                camlQuery = @"<View>
+                <Query>
+                  <OrderBy><FieldRef Name='DueDate' Ascending='True'/></Order By>
+                </Query>
+                <RowLimit>10</RowLimit>
+              </View>";
+            }
+
+            //ListItemCollection listItems = list.GetItems(camlQuery);
+            SPListItemCollection listItems = Common.SPHelper.QueryList(list, null, camlQuery, false);
+            //clientContext.Load(list);
+            //clientContext.Load(listItems);
+            //clientContext.ExecuteQuery();
+
+            ///  Initialize Datatable
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Title", System.Type.GetType("System.String"));
+            dt.Columns.Add("Description", System.Type.GetType("System.String"));
+            dt.Columns.Add("DueDate", System.Type.GetType("System.DateTime"));
+
+
+            // Loop through and fill DataTable
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                SPListItem listItem = listItems[i];
+
+                if (listItem["DueDate"] == null) { listItem["DueDate"] = DateTime.Now; }
+                if (listItem["Title"] == null) { listItem["Title"] = ""; }
+                if (listItem["Body"] == null) { listItem["Body"] = ""; }
+
+                string Title = (string)listItem["Title"];
+                string TitleLink = "<a href='http://www.ourktnet.com/Knowledge/ClientPortal/Lists/IPTaskList/DispForm.aspx?ID=" + listItem["ID"] + "&ContentTypeId=0x0108001CD054FA71F19041BBD51B71C5065AAF' target='_blank'>" + Title + "</a>";
+
+                string Description = "<div><b>" + TitleLink + "</b></div><br />" + (string)listItem["Body"];
+
+                Description = Description.Replace("/Knowledge/ClientPortal/eRedwell", "http://www.ourktnet.com/Knowledge/ClientPortal/eRedwell");
+                Description = Description.Replace("clientno=" + listItem["Client_x0020_Number"] + "\\", "clientno=" + listItem["Client_x0020_Number"]);
+                Description = Description.Replace("clientno=" + listItem["Client_x0020_Number"] + "\\", "clientno=" + listItem["Client_x0020_Number"]);
+                Description = Description.Replace(">" + listItem["Client_x0020_Number"] + "-", " target='_blank'>" + listItem["Client_x0020_Number"] + "-");
+
+                //string ClientNo = GetClientNo(Description);
+                //string MatterNo = GetMatterNo(Description);
+
+                //string ERLink = "<a href='http://www.ourktnet.com/Knowledge/ClientPortal/eRedwell/MatterDetails.aspx?matterno=" + MatterNo + "&p-custom-2=" + MatterNo + "&clientno=" + ClientNo + "'>" + ClientNo + "-" + MatterNo + "</a>";
+                //Description = Description.Replace(ClientNo + "-" + MatterNo, ERLink);
+
+                DateTime DueDate = (DateTime)listItem["DueDate"];
+                //string AssignedTo = ((FieldUserValue)listItem["AssignedTo"]).LookupValue;
+
+                DataRow dr = dt.NewRow();
+                
+                dr["Description"] = Description;
+                dr["DueDate"] = DueDate;
+
+                dt.Rows.Add(dr);
+                //Response.Write(Title + " - " + Description + " - " + DueDate.ToString() + " - " + AssignedTo + "<br />");
+            }
+
+            grdMyTasks.DataSource = dt;
+            grdMyTasks.DataBind();
+
+            //foreach (ListItem listItem in listItems)
+            //    Response.Write("Id: " + listItem.Id + " Title: " + listItem["Title"] + "<br />");
+        }
+
+        string GetClientNo(string desc)
+        {
+            int startloc = desc.IndexOf("File No(s):");
+            string clientno = desc.Substring(startloc + 12, 5);
+            return clientno;
+        }
+
+        string GetMatterNo(string desc)
+        {
+            int startloc = desc.IndexOf("File No(s):");
+            string matterno = desc.Substring(startloc + 18, 6);
+            return matterno;
+        }
+
+        string GetName(string userlogin)
+        {
+            string currentuser = "";
+
+            if (userlogin.Contains("\\"))
+            {
+                string[] split = userlogin.Split(new Char[] { '\\' });
+                currentuser = split[1];
+            }
+            else
+            {
+                currentuser = userlogin;
+            }
+
+
+            string connectionStringKSIS = ConfigurationManager.AppSettings["DSN_KSIS"].ToString();
+
+
+            SqlConnection conn = new SqlConnection(connectionStringKSIS);
+            conn.Open();
+
+            string tSQL = "Select LName, FName from Employee where Assigned_Login = '" + currentuser + "'";
+
+            SqlCommand cmd = new SqlCommand(tSQL, conn);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables.Count > 0)
+            {
+                DataTable dt = ds.Tables[0];
+                foreach (DataRow r in dt.Rows)
+                {
+                    String UserName = r["LName"].ToString() + ", " + r["FName"].ToString();
+                    return UserName;
+                }
+            }
+
+            return "";
+        }
+    }
+}

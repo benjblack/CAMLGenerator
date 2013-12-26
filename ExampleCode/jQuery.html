@@ -1,0 +1,38 @@
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script> 
+ <script type="text/javascript">  
+ $( document ).ready(function() { 
+     var soapEnv = 
+     "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/'> \
+         <soapenv:Body> \
+             <GetListItems xmlns='http://schemas.microsoft.com/sharepoint/soap/'> \
+                 <rowLimit>0</rowLimit> \
+                 <listName>Announcements</listName> \
+                     <ViewFields> \
+			<FieldRef Name='Title' /> \
+			<FieldRef Name='Project' /> \
+			<FieldRef Name='Service_x0020_Name' /> \
+                     </ViewFields> \
+             </GetListItems> \
+         </soapenv:Body> \
+     </soapenv:Envelope>";  
+     
+     jQuery.support.cors = true; // force cross-site scripting 
+     $.ajax({    
+         url: 'http://sm/_vti_bin/lists.asmx',    
+         type: 'POST',    
+         dataType: 'xml',    
+         data: soapEnv,    
+         contentType: 'text/xml; charset="utf-8"', 
+         complete: function (xData) {    
+             var result = '';    
+             $(xData.responseText).find('row').each(function () {    
+                var row = $(this);    
+                $('#exampleout').append('<li>Title: ' + row.attr('ows_Title') + '</li>');
+                $('#exampleout').append('<li>Project: ' + row.attr('ows_Project') + '</li>');
+                $('#exampleout').append('<li>Service_x0020_Name: ' + row.attr('ows_Service_x0020_Name') + '</li>');
+             });    
+         },  
+     contentType: 'text/xml; charset="utf-8"'  
+     }); 
+ }); </script> 
+ <ul id="exampleout"></ul> 
