@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DurandalCAMLGenerator.Azure" generation="1" functional="0" release="0" Id="2a5c8117-174c-4b35-ba90-97f33f8beb0f" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
+<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DurandalCAMLGenerator.Azure" generation="1" functional="0" release="0" Id="a58c5f33-4441-470c-a7ef-fb1ca16d1e67" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
   <groups>
     <group name="DurandalCAMLGenerator.AzureGroup" generation="1" functional="0" release="0">
       <componentports>
@@ -167,14 +167,14 @@
     </group>
   </groups>
   <implements>
-    <implementation Id="1492275d-8437-4006-bcc0-b8a18dd3d905" ref="Microsoft.RedDog.Contract\ServiceContract\DurandalCAMLGenerator.AzureContract@ServiceDefinition">
+    <implementation Id="5e70ed43-b488-43d5-9c3c-f2321d951bc4" ref="Microsoft.RedDog.Contract\ServiceContract\DurandalCAMLGenerator.AzureContract@ServiceDefinition">
       <interfacereferences>
-        <interfaceReference Id="11a4e536-9308-45f6-91fd-3390bb88364b" ref="Microsoft.RedDog.Contract\Interface\DurandalCAMLGenerator:Endpoint1@ServiceDefinition">
+        <interfaceReference Id="467067d7-722d-4f75-b647-f36cd93c25f2" ref="Microsoft.RedDog.Contract\Interface\DurandalCAMLGenerator:Endpoint1@ServiceDefinition">
           <inPort>
             <inPortMoniker name="/DurandalCAMLGenerator.Azure/DurandalCAMLGenerator.AzureGroup/DurandalCAMLGenerator:Endpoint1" />
           </inPort>
         </interfaceReference>
-        <interfaceReference Id="a115aaca-137c-4a43-9313-6af75d3027cc" ref="Microsoft.RedDog.Contract\Interface\DurandalCAMLGenerator:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput@ServiceDefinition">
+        <interfaceReference Id="7c65dabb-fd81-47ab-bbfb-357b924cf22e" ref="Microsoft.RedDog.Contract\Interface\DurandalCAMLGenerator:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput@ServiceDefinition">
           <inPort>
             <inPortMoniker name="/DurandalCAMLGenerator.Azure/DurandalCAMLGenerator.AzureGroup/DurandalCAMLGenerator:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" />
           </inPort>
